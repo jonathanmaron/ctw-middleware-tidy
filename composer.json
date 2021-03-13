@@ -1,7 +1,7 @@
 {
     "name": "ctw/ctw-middleware-tidy",
     "type": "library",
-    "description": "This middleware formats, fixes and beautifies the HTML in the Response Body using HTML Tidy.",
+    "description": "This middleware formats, fixes and beautifies the HTML in the Response body using HTML Tidy.",
     "license": "BSD-3-Clause",
     "config": {
         "sort-packages": true
