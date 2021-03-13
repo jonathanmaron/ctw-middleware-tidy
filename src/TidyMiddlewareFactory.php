@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Ctw\Middleware\Tidy;
+namespace Ctw\Middleware\TidyMiddleware;
 
 use Psr\Container\ContainerInterface;
 

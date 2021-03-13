@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Ctw\Middleware\Tidy;
+namespace Ctw\Middleware\TidyMiddleware;
 
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseInterface;
