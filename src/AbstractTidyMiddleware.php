@@ -3,71 +3,12 @@ declare(strict_types=1);
 
 namespace Ctw\Middleware\TidyMiddleware;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Server\MiddlewareInterface;
+use Ctw\Middleware\AbstractMiddleware;
 
-abstract class AbstractTidyMiddleware implements MiddlewareInterface
+abstract class AbstractTidyMiddleware extends AbstractMiddleware
 {
     /**
-     * Suffix added to HTML
-     */
-    protected const SUFFIX = '<!-- minify html: in %d b | out %d b | diff %01.4f %% -->';
-
-    /**
-     * Responses with these MIME types are HTML Responses
-     */
-    private const   MIME_TYPES
-        = [
-            'text/html',
-            'application/xhtml',
-        ];
-
-    protected function containsHtml(ResponseInterface $response): bool
-    {
-        $mimeTypes = [
-            'text/html',
-            'application/xhtml',
-        ];
-
-        $header = $response->getHeader('Content-Type');
-
-        if (0 === count($header)) {
-            return false;
-        }
-
-        foreach (self::MIME_TYPES as $needle) {
-            foreach ($header as $haystack) {
-                $pos = strpos($haystack, $needle);
-                if (is_int($pos)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Return an array of statistics for use in the suffix added to the HTML
-     *
-     * @param string $original
-     * @param string $minified
-     *
-     * @return array
-     */
-    protected function getSuffixStatistics(string $original, string $minified): array
-    {
-        $in      = mb_strlen($original);
-        $out     = mb_strlen($minified);
-        $percent = 100 * ($out / $in);
-        $diff    = 100 - $percent;
-
-        return [$in, $out, $diff];
-    }
-
-
-    /**
-     * Default HTML Tidy config (overwrite in site config)
+     * Default Tidy config (overwrite in site config)
      *
      * @var array
      */

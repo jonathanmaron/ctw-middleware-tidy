@@ -15,7 +15,7 @@
         </report>
     </coverage>
     <testsuites>
-        <testsuite name="CtwTest\Http">
+        <testsuite name="CtwTest\Middleware\TidyMiddleware">
             <directory>test</directory>
         </testsuite>
     </testsuites>
