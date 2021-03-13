@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace Ctw\Middleware\TidyMiddleware;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
-abstract class AbstractTidyMiddleware
+abstract class AbstractTidyMiddleware implements MiddlewareInterface
 {
     /**
      * Suffix added to HTML
