@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Ctw\\Middleware\\Tidy": "src"
+            "Ctw\\Middleware\\Tidy\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "CtwText\\Middleware\\Tidy": "src"
+            "CtwTest\\Middleware\\Tidy\\": "src"
         }
     },
     "scripts": {
