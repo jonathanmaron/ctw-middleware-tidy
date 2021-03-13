@@ -15,9 +15,7 @@ class ConfigProvider
     public function getDependencies(): array
     {
         return [
-            'aliases'    => [],
-            'invokables' => [],
-            'factories'  => [
+            'factories' => [
                 TidyMiddleware::class => TidyMiddlewareFactory::class,
             ],
         ];
