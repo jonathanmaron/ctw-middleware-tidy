@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Ctw\Middleware\MinifyTidy;
+namespace Ctw\Middleware\Tidy;
 
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseInterface;
