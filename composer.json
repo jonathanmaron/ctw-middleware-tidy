@@ -24,7 +24,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "CtwTest\\Middleware\\TidyMiddleware\\": "src"
+            "CtwTest\\Middleware\\TidyMiddleware\\": "test"
         }
     },
     "scripts": {
