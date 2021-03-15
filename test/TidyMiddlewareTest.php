@@ -16,12 +16,22 @@ class TidyMiddlewareTest extends AbstractCase
             [
                 'text/html',
                 trim((string) file_get_contents(__DIR__ . '/TestAsset/test1_input.htm')),
-                trim((string) file_get_contents(__DIR__ . '/TestAsset/test1_output.htm')),
+                [
+                    '<!-- html',
+                    '% -->',
+                    '<p>header</p>',
+                    '<p>main</p>',
+                    '<p>footer</p>',
+                ],
             ],
             [
                 'text/html',
                 trim((string) file_get_contents(__DIR__ . '/TestAsset/test2_input.htm')),
-                trim((string) file_get_contents(__DIR__ . '/TestAsset/test2_output.htm')),
+                [
+                    '<!-- html',
+                    '% -->',
+                    '<script type="text/javascript" src="https://s1-www.example.com/55db9daf/dist/js/app.min.js">',
+                ],
             ],
         ];
     }
@@ -29,11 +39,11 @@ class TidyMiddlewareTest extends AbstractCase
     /**
      * @param string $contentType
      * @param string $content
-     * @param string $expected
+     * @param array  $expected
      *
      * @dataProvider dataProvider
      */
-    public function testTidyMiddleware(string $contentType, string $content, string $expected): void
+    public function testTidyMiddleware(string $contentType, string $content, array $expected): void
     {
         $config = [
             'char-encoding'    => 'utf8',
@@ -68,7 +78,9 @@ class TidyMiddlewareTest extends AbstractCase
         ];
 
         $response = Dispatcher::run($stack);
-
-        $this->assertEquals($expected, $response->getBody()->getContents());
+        $haystack = $response->getBody()->getContents();
+        foreach ($expected as $needle) {
+            $this->assertStringContainsString($needle, $haystack);
+        }
     }
 }
