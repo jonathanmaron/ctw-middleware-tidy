@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace CtwTest\Middleware\TidyMiddleware;
 
 use Ctw\Middleware\TidyMiddleware\TidyMiddleware;
+use Ctw\Middleware\TidyMiddleware\TidyMiddlewareFactory;
+use Laminas\ServiceManager\ServiceManager;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseInterface;
@@ -45,30 +47,8 @@ class TidyMiddlewareTest extends AbstractCase
      */
     public function testTidyMiddleware(string $contentType, string $content, array $expected): void
     {
-        $config = [
-            'char-encoding'    => 'utf8',
-            'doctype'          => 'html5',
-            'bare'             => true,
-            'break-before-br'  => true,
-            'indent'           => false,
-            'indent-spaces'    => 0,
-            'logical-emphasis' => true,
-            'numeric-entities' => true,
-            'quiet'            => true,
-            'quote-ampersand'  => false,
-            'tidy-mark'        => false,
-            'uppercase-tags'   => false,
-            'vertical-space'   => false,
-            'wrap'             => 10000,
-            'wrap-attributes'  => false,
-            'write-back'       => true,
-        ];
-
-        $middleware = new TidyMiddleware();
-        $middleware->setConfig($config);
-
         $stack = [
-            $middleware,
+            $this->getInstance(),
             function () use ($contentType, $content): ResponseInterface {
                 $response = Factory::createResponse();
                 $body     = Factory::getStreamFactory()->createStream($content);
@@ -82,5 +62,38 @@ class TidyMiddlewareTest extends AbstractCase
         foreach ($expected as $needle) {
             $this->assertStringContainsString($needle, $haystack);
         }
+    }
+
+    private function getInstance(): TidyMiddleware
+    {
+        $config = [
+            TidyMiddleware::class => [
+                'tidy_config' => [
+                    'char-encoding'    => 'utf8',
+                    'doctype'          => 'html5',
+                    'bare'             => true,
+                    'break-before-br'  => true,
+                    'indent'           => false,
+                    'indent-spaces'    => 0,
+                    'logical-emphasis' => true,
+                    'numeric-entities' => true,
+                    'quiet'            => true,
+                    'quote-ampersand'  => false,
+                    'tidy-mark'        => false,
+                    'uppercase-tags'   => false,
+                    'vertical-space'   => false,
+                    'wrap'             => 10000,
+                    'wrap-attributes'  => false,
+                    'write-back'       => true,
+                ],
+            ],
+        ];
+
+        $container = new ServiceManager();
+        $container->setService('config', $config);
+
+        $factory = new TidyMiddlewareFactory();
+
+        return $factory->__invoke($container);
     }
 }
