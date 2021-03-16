@@ -38,7 +38,7 @@ class TidyMiddleware extends AbstractTidyMiddleware
 
         [$in, $out, $diff] = $this->getSuffixStatistics($htmlOriginal, $htmlModified);
 
-        $htmlModified .= PHP_EOL . sprintf(self::SUFFIX, $in, $out, $diff);
+        $htmlModified .= PHP_EOL . sprintf(self::HTML_SUFFIX, $in, $out, $diff);
 
         unset($minifier, $htmlOriginal);
 
