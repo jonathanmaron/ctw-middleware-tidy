@@ -12,7 +12,7 @@ class TidyMiddlewareFactory
         $config = [];
         if ($container->has('config')) {
             $config = $container->get('config');
-            $config = $config[TidyMiddleware::class]['tidy_config'] ?? [];
+            $config = $config[TidyMiddleware::class] ?? [];
         }
 
         $middleware = new TidyMiddleware();
