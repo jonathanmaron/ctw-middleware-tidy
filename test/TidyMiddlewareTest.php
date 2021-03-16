@@ -12,32 +12,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class TidyMiddlewareTest extends AbstractCase
 {
-    public function dataProvider(): array
-    {
-        return [
-            [
-                'text/html',
-                trim((string) file_get_contents(__DIR__ . '/TestAsset/test1_input.htm')),
-                [
-                    '<!-- html',
-                    '% -->',
-                    '<p>header</p>',
-                    '<p>main</p>',
-                    '<p>footer</p>',
-                ],
-            ],
-            [
-                'text/html',
-                trim((string) file_get_contents(__DIR__ . '/TestAsset/test2_input.htm')),
-                [
-                    '<!-- html',
-                    '% -->',
-                    '<script type="text/javascript" src="https://s1-www.example.com/55db9daf/dist/js/app.min.js">',
-                ],
-            ],
-        ];
-    }
-
     /**
      * @param string $contentType
      * @param string $content
@@ -59,9 +33,68 @@ class TidyMiddlewareTest extends AbstractCase
 
         $response = Dispatcher::run($stack);
         $haystack = $response->getBody()->getContents();
+
+        if (0 == count($expected)) {
+            $this->assertEmpty($haystack);
+
+            return;
+        }
+
         foreach ($expected as $needle) {
             $this->assertStringContainsString($needle, $haystack);
         }
+    }
+
+    public function dataProvider(): array
+    {
+        return [
+            [
+                'text/html',
+                trim((string) file_get_contents(__DIR__ . '/TestAsset/test0_input.htm')),
+                [],
+            ],
+            [
+                'text/html',
+                trim((string) file_get_contents(__DIR__ . '/TestAsset/test1_input.htm')),
+                [
+                    '<!-- html',
+                    '% -->',
+                    '<script type="text/javascript" src="https://s1-www.example.com/55db9daf/dist/js/app.min.js">',
+                ],
+            ],
+            [
+                'text/html',
+                trim((string) file_get_contents(__DIR__ . '/TestAsset/test2_input.htm')),
+                [
+                    '<!-- html',
+                    '% -->',
+                    '<p>header</p>',
+                    '<p>main</p>',
+                    '<p>footer</p>',
+                ],
+            ],
+        ];
+    }
+
+    public function testTidyMiddlewareContainsJson(): void
+    {
+        $contentType = 'application/json';
+        $content     = json_encode(['test' => true]);
+
+        $stack = [
+            $this->getInstance(),
+            function () use ($contentType, $content): ResponseInterface {
+                $response = Factory::createResponse();
+                $body     = Factory::getStreamFactory()->createStream($content);
+
+                return $response->withHeader('Content-Type', $contentType)->withBody($body);
+            },
+        ];
+
+        $response = Dispatcher::run($stack);
+        $actual   = $response->getBody()->getContents();
+
+        $this->assertSame($content, $actual);
     }
 
     private function getInstance(): TidyMiddleware
