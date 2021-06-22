@@ -35,13 +35,13 @@ class TidyMiddlewareTest extends AbstractCase
         $haystack = $response->getBody()->getContents();
 
         if (0 == count($expected)) {
-            $this->assertEmpty($haystack);
+            self::assertEmpty($haystack);
 
             return;
         }
 
         foreach ($expected as $needle) {
-            $this->assertStringContainsString($needle, $haystack);
+            self::assertStringContainsString($needle, $haystack);
         }
     }
 
@@ -80,6 +80,7 @@ class TidyMiddlewareTest extends AbstractCase
     {
         $contentType = 'application/json';
         $content     = json_encode(['test' => true]);
+        assert(is_string($content));
 
         $stack = [
             $this->getInstance(),
@@ -94,7 +95,7 @@ class TidyMiddlewareTest extends AbstractCase
         $response = Dispatcher::run($stack);
         $actual   = $response->getBody()->getContents();
 
-        $this->assertSame($content, $actual);
+        self::assertSame($content, $actual);
     }
 
     private function getInstance(): TidyMiddleware
