@@ -45,4 +45,47 @@ abstract class AbstractTidyMiddleware extends AbstractMiddleware
 
         return $this;
     }
+
+    protected function postProcess(string $htmlModified): string
+    {
+        $htmlModified = $this->trim($htmlModified);
+        $htmlModified = $this->doctype($htmlModified);
+
+        return $htmlModified;
+    }
+
+    private function trim(string $htmlModified): string
+    {
+        return trim($htmlModified);
+    }
+
+    /**
+     * Tidy removes the doctype when parsing HTML5 (bug?).
+     * This causes the browser to switch to quirks mode, which is undesirable.
+     * This method re-adds the doctype in the case of HTML5.
+     *
+     * @param string $htmlModified
+     *
+     * @return string
+     */
+    private function doctype(string $htmlModified): string
+    {
+        $config = $this->getConfig();
+
+        if (!isset($config['doctype'])) {
+            return $htmlModified;
+        }
+
+        if ('html5' !== $config['doctype']) {
+            return $htmlModified;
+        }
+
+        $prefix = '<!DOCTYPE html>';
+
+        if ($prefix === substr($htmlModified, 0, strlen($prefix))) {
+            return $htmlModified;
+        }
+
+        return $prefix . PHP_EOL . $htmlModified;
+    }
 }
