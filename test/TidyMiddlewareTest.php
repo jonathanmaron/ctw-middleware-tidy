@@ -45,7 +45,7 @@ class TidyMiddlewareTest extends AbstractCase
         }
     }
 
-    public function dataProvider(): array
+    static public function dataProvider(): array
     {
         return [
             [
