@@ -44,11 +44,15 @@ class TidyMiddlewareTest extends AbstractCase
 
     public static function dataProvider(): array
     {
+        $buffer1 = (string) file_get_contents(__DIR__ . '/TestAsset/test0_input.htm');
+        $buffer2 = (string) file_get_contents(__DIR__ . '/TestAsset/test1_input.htm');
+        $buffer3 = (string) file_get_contents(__DIR__ . '/TestAsset/test2_input.htm');
+
         return [
-            ['text/html', trim((string) file_get_contents(__DIR__ . '/TestAsset/test0_input.htm')), []],
+            ['text/html', trim($buffer1), []],
             [
                 'text/html',
-                trim((string) file_get_contents(__DIR__ . '/TestAsset/test1_input.htm')),
+                trim($buffer2),
                 [
                     '<!-- html',
                     '% -->',
@@ -57,7 +61,7 @@ class TidyMiddlewareTest extends AbstractCase
             ],
             [
                 'text/html',
-                trim((string) file_get_contents(__DIR__ . '/TestAsset/test2_input.htm')),
+                trim($buffer3),
                 ['<!-- html', '% -->', '<p>header</p>', '<p>main</p>', '<p>footer</p>'],
             ],
         ];
