@@ -9,8 +9,6 @@ abstract class AbstractTidyMiddleware extends AbstractMiddleware
 {
     /**
      * Default Tidy config (overwrite in site config)
-     *
-     * @var array
      */
     private array $config
         = [
@@ -49,9 +47,8 @@ abstract class AbstractTidyMiddleware extends AbstractMiddleware
     protected function postProcess(string $htmlModified): string
     {
         $htmlModified = $this->trim($htmlModified);
-        $htmlModified = $this->doctype($htmlModified);
 
-        return $htmlModified;
+        return $this->doctype($htmlModified);
     }
 
     private function trim(string $htmlModified): string
@@ -63,10 +60,6 @@ abstract class AbstractTidyMiddleware extends AbstractMiddleware
      * Tidy removes the doctype when parsing HTML5 (bug?).
      * This causes the browser to switch to quirks mode, which is undesirable.
      * This method re-adds the doctype in the case of HTML5.
-     *
-     * @param string $htmlModified
-     *
-     * @return string
      */
     private function doctype(string $htmlModified): string
     {
@@ -82,7 +75,7 @@ abstract class AbstractTidyMiddleware extends AbstractMiddleware
 
         $prefix = '<!DOCTYPE html>';
 
-        if ($prefix === substr($htmlModified, 0, strlen($prefix))) {
+        if (str_starts_with($htmlModified, $prefix)) {
             return $htmlModified;
         }
 

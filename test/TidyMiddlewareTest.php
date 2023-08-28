@@ -8,33 +8,30 @@ use Ctw\Middleware\TidyMiddleware\TidyMiddlewareFactory;
 use Laminas\ServiceManager\ServiceManager;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 
 class TidyMiddlewareTest extends AbstractCase
 {
-    /**
-     * @param string $contentType
-     * @param string $content
-     * @param array  $expected
-     *
-     * @dataProvider dataProvider
-     */
+    #[DataProvider('dataProvider')]
     public function testTidyMiddleware(string $contentType, string $content, array $expected): void
     {
         $stack = [
             $this->getInstance(),
-            function () use ($contentType, $content): ResponseInterface {
+            static function () use ($contentType, $content): ResponseInterface {
                 $response = Factory::createResponse();
                 $body     = Factory::getStreamFactory()->createStream($content);
+                $response = $response->withHeader('Content-Type', $contentType);
 
-                return $response->withHeader('Content-Type', $contentType)->withBody($body);
+                return $response->withBody($body);
             },
         ];
 
         $response = Dispatcher::run($stack);
-        $haystack = $response->getBody()->getContents();
+        $body     = $response->getBody();
+        $haystack = $body->getContents();
 
-        if (0 == count($expected)) {
+        if ([] === $expected) {
             self::assertEmpty($haystack);
 
             return;
@@ -45,14 +42,10 @@ class TidyMiddlewareTest extends AbstractCase
         }
     }
 
-    static public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
-            [
-                'text/html',
-                trim((string) file_get_contents(__DIR__ . '/TestAsset/test0_input.htm')),
-                [],
-            ],
+            ['text/html', trim((string) file_get_contents(__DIR__ . '/TestAsset/test0_input.htm')), []],
             [
                 'text/html',
                 trim((string) file_get_contents(__DIR__ . '/TestAsset/test1_input.htm')),
@@ -65,35 +58,33 @@ class TidyMiddlewareTest extends AbstractCase
             [
                 'text/html',
                 trim((string) file_get_contents(__DIR__ . '/TestAsset/test2_input.htm')),
-                [
-                    '<!-- html',
-                    '% -->',
-                    '<p>header</p>',
-                    '<p>main</p>',
-                    '<p>footer</p>',
-                ],
+                ['<!-- html', '% -->', '<p>header</p>', '<p>main</p>', '<p>footer</p>'],
             ],
         ];
     }
 
     public function testTidyMiddlewareContainsJson(): void
     {
-        $contentType = 'application/json';
-        $content     = json_encode(['test' => true]);
+        $content = json_encode([
+            'test' => true,
+        ]);
         assert(is_string($content));
 
         $stack = [
             $this->getInstance(),
-            function () use ($contentType, $content): ResponseInterface {
-                $response = Factory::createResponse();
-                $body     = Factory::getStreamFactory()->createStream($content);
+            static function () use ($content): ResponseInterface {
+                $contentType = 'application/json';
+                $response    = Factory::createResponse();
+                $body        = Factory::getStreamFactory()->createStream($content);
+                $response    = $response->withHeader('Content-Type', $contentType);
 
-                return $response->withHeader('Content-Type', $contentType)->withBody($body);
+                return $response->withBody($body);
             },
         ];
 
         $response = Dispatcher::run($stack);
-        $actual   = $response->getBody()->getContents();
+        $body     = $response->getBody();
+        $actual   = $body->getContents();
 
         self::assertSame($content, $actual);
     }

@@ -3,16 +3,10 @@ declare(strict_types=1);
 
 namespace Ctw\Middleware\TidyMiddleware;
 
-use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 class TidyMiddlewareFactory
 {
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function __invoke(ContainerInterface $container): TidyMiddleware
     {
         $config = [];
@@ -24,7 +18,7 @@ class TidyMiddlewareFactory
 
         $middleware = new TidyMiddleware();
 
-        if (count($config) > 0) {
+        if ((is_countable($config) ? count($config) : 0) > 0) {
             $middleware->setConfig($config);
         }
 

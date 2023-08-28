@@ -19,9 +19,11 @@ class TidyMiddleware extends AbstractTidyMiddleware
             return $response;
         }
 
-        $htmlOriginal = $response->getBody()->getContents();
+        $body = $response->getBody();
 
-        if (0 === strlen($htmlOriginal)) {
+        $htmlOriginal = $body->getContents();
+
+        if ('' === $htmlOriginal) {
             return $response;
         }
 
