@@ -1,4 +1,4 @@
-{  "minimum-stability": "dev", "prefer-stable": true,  
+{
     "name": "ctw/ctw-middleware-tidy",
     "description": "This PSR-15 middleware formats, fixes and beautifies the HTML in the Response body using HTML Tidy.",
     "license": "BSD-3-Clause",
@@ -19,6 +19,8 @@
         "squizlabs/php_codesniffer": "^3.6",
         "symfony/var-dumper": "^7.0"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Ctw\\Middleware\\TidyMiddleware\\": "src"
