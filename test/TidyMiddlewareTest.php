@@ -59,11 +59,7 @@ class TidyMiddlewareTest extends AbstractCase
                     '<script type="text/javascript" src="https://s1-www.example.com/55db9daf/dist/js/app.min.js">',
                 ],
             ],
-            [
-                'text/html',
-                trim($buffer3),
-                ['<!-- html', '% -->', '<p>header</p>', '<p>main</p>', '<p>footer</p>'],
-            ],
+            ['text/html', trim($buffer3), ['<!-- html', '% -->', '<p>header</p>', '<p>main</p>', '<p>footer</p>']],
         ];
     }
 
