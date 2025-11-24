@@ -11,14 +11,15 @@ class TidyMiddlewareFactory
     {
         $config = [];
         if ($container->has('config')) {
-            $config = $container->get('config');
+            $containerConfig = $container->get('config');
+            assert(is_array($containerConfig));
+            $config = $containerConfig[TidyMiddleware::class] ?? [];
             assert(is_array($config));
-            $config = $config[TidyMiddleware::class] ?? [];
         }
 
         $middleware = new TidyMiddleware();
 
-        if ((is_countable($config) ? count($config) : 0) > 0) {
+        if ([] !== $config) {
             $middleware->setConfig($config);
         }
 

@@ -38,6 +38,7 @@ class TidyMiddlewareTest extends AbstractCase
         }
 
         foreach ($expected as $needle) {
+            assert(is_string($needle));
             self::assertStringContainsString($needle, $haystack);
         }
     }

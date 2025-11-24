@@ -36,6 +36,7 @@ class TidyMiddleware extends AbstractTidyMiddleware
 
         // @phpstan-ignore-next-line
         $htmlModified = (string) $minifier->html();
+        assert(is_string($htmlModified));
         $htmlModified = $this->postProcess($htmlModified);
 
         [$in, $out, $diff] = $this->getSuffixStatistics($htmlOriginal, $htmlModified);
