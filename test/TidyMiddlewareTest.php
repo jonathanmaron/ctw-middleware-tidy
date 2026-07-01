@@ -221,6 +221,7 @@ final class TidyMiddlewareTest extends AbstractCase
         // pointer at end-of-stream. Rewind to read the untouched content back.
         $body = $response->getBody();
         $body->rewind();
+
         $actual = $body->getContents();
 
         self::assertSame($content, $actual);
