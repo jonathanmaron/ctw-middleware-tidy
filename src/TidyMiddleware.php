@@ -11,6 +11,7 @@ use tidy;
 
 class TidyMiddleware extends AbstractTidyMiddleware
 {
+    #[\Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $handler->handle($request);

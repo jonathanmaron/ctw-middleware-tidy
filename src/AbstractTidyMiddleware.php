@@ -14,8 +14,8 @@ abstract class AbstractTidyMiddleware extends AbstractMiddleware
         = [
             'char-encoding'    => 'utf8',
             'doctype'          => 'html5',
-            //'new-blocklevel-tags' => 'article,header,footer,section,nav,aside',
-            //'new-inline-tags'     => 'video,audio,canvas,ruby,rt,rp',
+            // 'new-blocklevel-tags' => 'article,header,footer,section,nav,aside',
+            // 'new-inline-tags'     => 'video,audio,canvas,ruby,rt,rp',
             'bare'             => true,
             'break-before-br'  => true,
             'indent'           => false,
@@ -46,9 +46,9 @@ abstract class AbstractTidyMiddleware extends AbstractMiddleware
 
     protected function postProcess(string $htmlModified): string
     {
-        $htmlModified = $this->trim($htmlModified);
-
-        return $this->doctype($htmlModified);
+        return $htmlModified
+            |> $this->trim(...)
+            |> $this->doctype(...);
     }
 
     private function trim(string $htmlModified): string
