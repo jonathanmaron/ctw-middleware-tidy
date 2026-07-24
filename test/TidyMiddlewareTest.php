@@ -12,6 +12,7 @@ use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Psr\Http\Message\ResponseInterface;
 
 // Load the namespaced tidy_clean_repair() override so the repair-failure guard
@@ -24,6 +25,7 @@ require_once __DIR__ . '/TestAsset/TidyFunctionOverride.php';
  */
 #[CoversClass(TidyMiddleware::class)]
 #[CoversClass(AbstractTidyMiddleware::class)]
+#[UsesClass(TidyMiddlewareFactory::class)]
 final class TidyMiddlewareTest extends AbstractCase
 {
     /**

@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace CtwTest\Middleware\TidyMiddleware;
 
+use Ctw\Middleware\TidyMiddleware\AbstractTidyMiddleware;
 use Ctw\Middleware\TidyMiddleware\TidyMiddleware;
 use Ctw\Middleware\TidyMiddleware\TidyMiddlewareFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Psr\Container\ContainerInterface;
 
 /**
  * @see TidyMiddlewareFactory
  */
 #[CoversClass(TidyMiddlewareFactory::class)]
+#[UsesClass(TidyMiddleware::class)]
+#[UsesClass(AbstractTidyMiddleware::class)]
 final class TidyMiddlewareFactoryTest extends AbstractCase
 {
     /**
